@@ -1,12 +1,11 @@
-.draggable { width: 100px; height: 171px; margin: 5px; }
-.draggable:hover { cursor: move; }
+.draggable { width: 100px; height: 171px; margin: 5px; cursor: pointer; }
 .droppable {
     width: 100px; height: 171px; margin: 5px;
     background-position: top center;
     background-repeat: no-repeat;
     text-align: center;
+    cursor: pointer;
 }
-.droppable:hover { cursor: move; }
 .ui-widget-header p, .ui-widget-content p { margin: 0; }
 
 #snaptarget { height: 140px; }
