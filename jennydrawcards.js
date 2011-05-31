@@ -150,7 +150,7 @@ $(document).ready(function() {
             $t.attr("id", $t.attr("id") + serialNumber);
             serialNumber += 1;
             
-            $t.data("card", cards[i - l]).data("reversed", Math.floor(Math.random() + 0.5))
+            $t.data("card", cards[i - l])
                 .draggable({ grid: [gridSize, gridSize] })
                 .mouseover(function() { $(this).addClass('ui-state-highlight'); })
                 .mouseout(function() { $(this).removeClass('ui-state-highlight'); })
@@ -159,6 +159,11 @@ $(document).ready(function() {
                     left: $("#deck").position().left + (i - l) * gridSize,
                     top: $("#deck").position().top
                 });
+            if ($("#canReverse").attr("value") == "true") {
+                $t.data("reversed", Math.floor(Math.random() + 0.5));
+            } else {
+                $t.data("reversed", 0);
+            }
             $t.css('z-index', 80 + i);
             $("#deck").append($t);
             $t.show("slow");
