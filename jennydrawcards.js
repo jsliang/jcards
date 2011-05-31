@@ -184,7 +184,7 @@ $(document).ready(function() {
 
         $t = $('#droppable').clone(true);
         $t.attr("id", $t.attr("id") + serialNumber);
-        $t.html('<span>Card ' + $("#spread").data('cardSN') + '</span>');
+        $t.html('<span>第 ' + $("#spread").data('cardSN') + ' 張牌</span>');
         $t.prepend('<div style="height: ' + cardHeight * 0.45 + 'px;"></div>');
         $t.dblclick(function() {
             $span = $(this).children('span:first');
