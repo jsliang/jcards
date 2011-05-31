@@ -1,0 +1,18 @@
+.draggable { width: 100px; height: 171px; margin: 5px; }
+.draggable:hover { cursor: move; }
+.droppable {
+    width: 100px; height: 171px; margin: 5px;
+    background-position: top center;
+    background-repeat: no-repeat;
+    text-align: center;
+}
+.droppable:hover { cursor: move; }
+.ui-widget-header p, .ui-widget-content p { margin: 0; }
+
+#snaptarget { height: 140px; }
+#deck { float: none; clear: both; height: 200px;}
+#spread { float: none; clear: both; }
+
+h1 { margin-left: -2em; font-size: 1.2em; }
+h2 { margin-left: -1.5em; font-size: 1em; }
+body { margin-left: 3em; font-size: 0.8em; font-family: Lucida Grande, Lucida Sans, Arial, sans-serif}
