@@ -111,9 +111,16 @@ $(document).ready(function() {
                     $(this).dialog('close');
                     $('#shuffle').trigger('click');
                     $('#spread').children('div').each(function(){
-                        $(this).has('p') // if the card is turned over
-                            .append('<span>' + $(this).data('cardMeaning') + '</span>')
+                        $(this).has('p') // for turned over cards
                             .children('div:first').height(cardHeight * 0.45);
+                        
+                        if ($(this).data('cardMeaning')) {
+                            $(this).has('p') // for turned over cards
+                                .append('<span>' + $(this).data('cardMeaning') + '</span>');
+                        } else {
+                            $(this).has('p') // for cards not turned over
+                                .append('<span></span>');
+                        }
                         
                         $(this)
                             .removeClass('ui-state-highlight')
