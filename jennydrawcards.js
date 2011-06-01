@@ -94,6 +94,7 @@ $(document).ready(function() {
     $('#dialogResult').dialog({
         bgiframe: true,
         autoOpen: false,
+        width: 600,
         buttons: {
             Ok: function() { $(this).dialog('close'); }
         }
@@ -189,26 +190,24 @@ $(document).ready(function() {
 
         $t = $('#droppable').clone(true);
         $t.attr("id", $t.attr("id") + serialNumber);
-        $t.html('<span>第 ' + $("#spread").data('cardSN') + ' 張牌</span>');
+        $t.html('<span>位置 ' + $("#spread").data('cardSN') + '</span>');
         $t.prepend('<div style="height: ' + cardHeight * 0.45 + 'px;"></div>');
         $t.dblclick(function() {
             $span = $(this).children('span:first');
-            var strForm = '<input type="text" style="width: ' + $t.width() * 0.8 + 'px;" id="edittext" /> '
-            strForm += '<input type="button" value="修改" id="editbutton"/>';
+            prevValue = $span.text();
+            var strForm = '<input type="text" style="width: ' + $t.width() * 0.8 + 'px;" /> '
             $span.html(strForm);
 
             $text = $span.children('input:first');
-            $button = $span.children('input:last');
-            
-            $text.attr("id", $(this).attr("id") + serialNumber).focus();
-            serialNumber += 1;
-            
-            $button.attr("id", $(this).attr("id") + serialNumber).click(function() {
-                $(this).parent().parent().data('cardMeaning', $text.attr('value'));
-                $span.text($text.attr('value'));
-                $("#spread").data('cardMeaningSet', true);
-            });
-            serialNumber += 1;
+            $text.attr('value', prevValue)
+                .keypress(function(event) {
+                if (event.which == '13') { // enter key pressed
+                    $container = $(this).parent();
+                    $container.text($(this).attr('value'));
+                    $container.parent().data('cardMeaning', $(this).attr('value'));
+                    $("#spread").data('cardMeaningSet', true);
+                }
+            }).focus();
         });
         serialNumber += 1;
 
@@ -250,7 +249,10 @@ $(document).ready(function() {
         $("#spread").children(".droppable").each(function() {
             // Set string for results
             if ($("#spread").data('cardMeaningSet')) {
-                if (cardStr != '') { cardStr += '<br />';} 
+                if (cardStr != '') { cardStr += '<br />';}
+                if (!$(this).data('cardMeaning')) {
+                    $(this).data('cardMeaning', $(this).children('span:first').text());
+                }
                 cardStr += $(this).data('cardMeaning') + '：' + $(this).data('name');
             } else {
                 if (cardStr != '') { cardStr += '　';} 
@@ -269,7 +271,7 @@ $(document).ready(function() {
         });
 
         // Open result dialog
-        $("#dialogResult").html(cardStr).dialog('open');
+        $("#dialogResult").html("<p>可將以下結果複製貼上給解牌者：</p><p>" + cardStr + "</p>").dialog('open');
     });
 
 });
