@@ -100,6 +100,35 @@ $(document).ready(function() {
         }
     });
 
+    $('#dialogRedraw').dialog({
+        bgiframe: true,
+        autoOpen: false,
+        resizable: false,
+        modal: true,
+        buttons: {
+            Cancel: function() { $(this).dialog('close'); },
+            Ok: function() {
+                    $(this).dialog('close');
+                    $('#shuffle').trigger('click');
+                    $('#spread').children('div').each(function(){
+                        $(this).has('p') // if the card is turned over
+                            .append('<span>' + $(this).data('cardMeaning') + '</span>')
+                            .children('div:first').height(cardHeight * 0.45);
+                        
+                        $(this)
+                            .removeClass('ui-state-highlight')
+                            .css('backgroundImage', '')
+                            .data('card', '')
+                            .data('reversed', '')
+                            .data('name', '')
+                            .children('p').remove();
+                    });
+                    $('#turnDroppable').hide();
+                    $('#resetDroppable').hide();
+                }
+        }
+    });
+
     $('#dialogClear').dialog({
         bgiframe: true,
         autoOpen: false,
@@ -179,7 +208,8 @@ $(document).ready(function() {
     $("#spread").data('cardMeaningSet', false);
     $("#deleteDroppable").click(function() {
         $("#dialogResult").dialog('close');
-        $("#dialogClear").text('系統會自動重新洗牌。你確定要清空牌陣嗎？').dialog('open');
+        $("#dialogRedraw").dialog('close');
+        $("#dialogClear").text('將自動重新洗牌。你確定要刪除牌陣嗎？').dialog('open');
     }).hide();
 
     // Create droppables
@@ -214,13 +244,16 @@ $(document).ready(function() {
         $t.draggable({ grid: [gridSize, gridSize] })
             .droppable({
                 hoverClass: 'ui-state-active',
+                
+                // When drawn cards are placed into the droppable...
                 drop: function(event, ui) {
                     $("#turnDroppable").show();
-                    $(this).addClass('ui-state-highlight').data('card', ui.draggable.data('card'))
-                        .data('reversed', ui.draggable.data('reversed'))
-                        .data('dropped', 1);
+                    $("#resetDroppable").show();
                     
-                    $(this).data('name', cardName[$(this).data("card")]);
+                    $(this).addClass('ui-state-highlight')
+                        .data('card', ui.draggable.data('card'))
+                        .data('reversed', ui.draggable.data('reversed'))
+                        .data('name', cardName[$(this).data("card")]);
 
                     if (ui.draggable.data('reversed') == 0) {
                         $(this).data('name', $(this).data('name') + '（正）');
@@ -234,7 +267,7 @@ $(document).ready(function() {
                 position: 'absolute',
                 left: $("#spread").data("left"),
                 top: $("#spread").position().top
-            }).data('dropped', 0);
+            });
         $t.show();
         
         $("#spread").append($t);
@@ -274,4 +307,10 @@ $(document).ready(function() {
         $("#dialogResult").html("<p>可將以下結果複製貼上給解牌者：</p><p>" + cardStr + "</p>").dialog('open');
     });
 
+    // Redraw cards
+    $("#resetDroppable").click(function() {
+        $("#dialogResult").dialog('close');
+        $("#dialogClear").dialog('close');
+        $("#dialogRedraw").text('將自動重新洗牌。你確定要重新抽牌嗎？').dialog('open');
+    }).hide();
 });

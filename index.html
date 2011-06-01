@@ -15,10 +15,10 @@
         <div>
             <h1>jCards 塔羅抽牌程式 v0.4</h1>
             <p align="right">
-                使用圖片：<a href="http://en.wikipedia.org/wiki/Rider-Waite_tarot_deck" target="_blank">萊德‧偉特塔羅牌</a><br/>
+                使用圖片：<a href="http://en.wikipedia.org/wiki/Rider-Waite_tarot_deck" target="_blank">萊德‧偉特塔羅牌</a>
                 程式：jsliang (jsliang.tw [at] gmail.com)
             </p>
-            <h2>1. 洗牌</h2>
+            <h2>1. 決定占卜方式</h2>
             <div>
                 使用哪些牌：
                 <select id="mode" class='ui-state-default'>
@@ -31,22 +31,27 @@
                     <option value="true" selected="true">可逆位</option>
                     <option value="false">全正位</option>
                 </select>
-                想好所要占卜的問題後，按洗牌鈕：<input type="button" id="shuffle" value="洗牌" class='ui-state-default' />
+            </div>
+            <h2>2. 想好所要占卜的問題後，按下洗牌鈕</h2>
+            <div>
+                <input type="button" id="shuffle" value="洗牌" class='ui-state-default' />
                 <div id="deck"></div>
             </div>
             
-            <h2>2. 設定牌陣</h2>
-            <p>按下「加牌」鈕新增牌陣位置。牌陣位置可視需求拖曳。</p>
+            <h2>3. 設定牌陣</h2>
+            <p>按下「加牌」鈕新增牌的位置。牌的位置可視需求拖曳。</p>
             <p>牌陣設定好後，從上方洗好的牌中隨意挑選，將選到的牌拖曳至牌陣裡。抽牌完畢後再按下「翻牌」。</p>
             <div>
                 <input type="button" id="createDroppable" value="加牌" class='ui-state-default' />
                 <input type="button" id="turnDroppable" value="翻牌" class='ui-state-default' />
-                <input type="button" id="deleteDroppable" value="重設" class='ui-state-default' />
+                <input type="button" id="resetDroppable" value="重新抽牌" class='ui-state-default' />
+                <input type="button" id="deleteDroppable" value="刪除牌陣" class='ui-state-default' />
                 <div id="spread"></div>
             </div>
             
             <div id="dialogResult" title="抽牌結果"></div>
-            <div id="dialogClear" title="確定清空牌陣？"></div>
+            <div id="dialogRedraw" title="確定重新抽牌？"></div>
+            <div id="dialogClear" title="確定刪除牌陣？"></div>
         </div>
         <!-- prototype for draggable -->
         <div id="draggable" class="draggable ui-widget-content"></div>
