@@ -1,4 +1,4 @@
-﻿var serialNumber = 0;
+﻿var cardProtoSN = 0;
 var gridSize = 10;
 var cardWidth = 100;
 var cardHeight = 171;
@@ -181,7 +181,7 @@ $(document).ready(function() {
                     $('#shuffle').trigger('click');
                     $('#spreadArea').children().remove();
                     $('#spreadArea').data('left', $('#spreadArea').position().left);
-                    $('#spreadArea').data('cardSN', 0);
+                    $('#spreadArea').data('cardPosSN', 0);
                     $('#spreadArea').data('cardMeaningSet', false);
                     
                     $('#redrawCards').hide();
@@ -221,8 +221,8 @@ $(document).ready(function() {
         // Generate cardProtos
         for (i = l; i <= u; i = i + 1) {
             $t = $("#cardProto").clone(true);
-            $t.attr("id", $t.attr("id") + serialNumber);
-            serialNumber += 1;
+            $t.attr("id", $t.attr("id") + cardProtoSN);
+            cardProtoSN += 1;
             
             $t.data("card", cards[i - l])
                 .draggable({ grid: [gridSize, gridSize] })
@@ -248,7 +248,7 @@ $(document).ready(function() {
     $("#spreadArea").data("left", $("#spreadArea").position().left);
 
     // Clear the spreadArea
-    $("#spreadArea").data('cardSN', 0);
+    $("#spreadArea").data('cardPosSN', 0);
     $("#spreadArea").data('cardMeaningSet', false);
     $("#resetSpreadArea").click(function() {
         $("#dialogTurnCardsResult").dialog('close');
@@ -262,11 +262,11 @@ $(document).ready(function() {
         $('#saveSpreadArea').show();
         $('#resetSpreadArea').show();
 
-        $('#spreadArea').data('cardSN', $('#spreadArea').data('cardSN') + 1);
+        $('#spreadArea').data('cardPosSN', $('#spreadArea').data('cardPosSN') + 1);
 
         $t = $('#cardPosition').clone(true);
-        $t.attr("id", $t.attr("id") + serialNumber);
-        $t.html('<span>位置 ' + $("#spreadArea").data('cardSN') + '</span>');
+        $t.attr("id", $t.attr("id") + $("#spreadArea").data('cardPosSN'));
+        $t.html('<span>位置 ' + $("#spreadArea").data('cardPosSN') + '</span>');
         $t.prepend('<div style="height: ' + cardHeight * 0.45 + 'px;"></div>');
         $t.dblclick(function() {
             $span = $(this).children('span:first');
@@ -286,7 +286,6 @@ $(document).ready(function() {
                 }
             }).focus();
         });
-        serialNumber += 1;
 
         $t.draggable({ grid: [gridSize, gridSize] })
             .droppable({
