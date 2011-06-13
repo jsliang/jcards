@@ -91,7 +91,7 @@ $(document).ready(function() {
     $('#cardProto').data('card', 0).data('reversed', 0).hide();
     $('#cardPosition').hide();
     
-    $('#dialogResult').dialog({
+    $('#dialogTurnCardsResult').dialog({
         bgiframe: true,
         autoOpen: false,
         width: 600,
@@ -136,7 +136,7 @@ $(document).ready(function() {
         }
     });
 
-    $('#dialogReset').dialog({
+    $('#dialogResetSpreadArea').dialog({
         bgiframe: true,
         autoOpen: false,
         resizable: false,
@@ -159,7 +159,7 @@ $(document).ready(function() {
     $('#shuffle').click(function() {
         // Clear first
         $("#deck").children().remove();
-        $("#dialogReset").dialog('close');
+        $("#dialogResetSpreadArea").dialog('close');
 
         // Set the range of cards (major, minor, both)
         var u, l;
@@ -214,9 +214,9 @@ $(document).ready(function() {
     $("#spreadArea").data('cardSN', 0);
     $("#spreadArea").data('cardMeaningSet', false);
     $("#resetSpreadArea").click(function() {
-        $("#dialogResult").dialog('close');
+        $("#dialogTurnCardsResult").dialog('close');
         $("#dialogRedrawCards").dialog('close');
-        $("#dialogReset").text('將自動重新洗牌。你確定要刪除牌陣嗎？').dialog('open');
+        $("#dialogResetSpreadArea").text('將自動重新洗牌。你確定要刪除牌陣嗎？').dialog('open');
     }).hide();
 
     // Create cardPositions
@@ -311,13 +311,13 @@ $(document).ready(function() {
         });
 
         // Open result dialog
-        $("#dialogResult").html("<p>可將以下結果複製貼上給解牌者：</p><p>" + cardStr + "</p>").dialog('open');
+        $("#dialogTurnCardsResult").html("<p>可將以下結果複製貼上給解牌者：</p><p>" + cardStr + "</p>").dialog('open');
     });
 
     // Redraw cards
     $("#redrawCards").click(function() {
-        $("#dialogResult").dialog('close');
-        $("#dialogReset").dialog('close');
+        $("#dialogTurnCardsResult").dialog('close');
+        $("#dialogResetSpreadArea").dialog('close');
         $("#dialogRedrawCards").text('將自動重新洗牌。你確定要重新抽牌嗎？').dialog('open');
     }).hide();
 });
