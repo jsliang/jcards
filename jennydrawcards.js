@@ -150,7 +150,10 @@ $(document).ready(function() {
                     $('#spreadArea').data('left', $('#spreadArea').position().left);
                     $('#spreadArea').data('cardSN', 0);
                     $('#spreadArea').data('cardMeaningSet', false);
+                    
+                    $('#redrawCards').hide();
                     $('#turnCards').hide();
+                    $('#resetSpreadArea').hide();
                 }
         }
     });
@@ -312,6 +315,8 @@ $(document).ready(function() {
 
         // Open result dialog
         $("#dialogTurnCardsResult").html("<p>可將以下結果複製貼上給解牌者：</p><p>" + cardStr + "</p>").dialog('open');
+        $("#dialogResetSpreadArea").dialog('close');
+        $("#dialogRedrawCards").dialog('close');
     });
 
     // Redraw cards
