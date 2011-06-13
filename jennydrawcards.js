@@ -136,6 +136,20 @@ $(document).ready(function() {
         }
     });
 
+    $('#dialogSaveSpreadArea').dialog({
+        bgiframe: true,
+        autoOpen: false,
+        resizable: false,
+        modal: true,
+        buttons: {
+            Cancel: function() { $(this).dialog('close'); },
+            'Save': function() {
+                    $(this).dialog('close');
+                    alert('#dialogSaveSpreadArea');
+                }
+        }
+    });
+
     $('#dialogResetSpreadArea').dialog({
         bgiframe: true,
         autoOpen: false,
@@ -153,6 +167,7 @@ $(document).ready(function() {
                     
                     $('#redrawCards').hide();
                     $('#turnCards').hide();
+                    $('#saveSpreadArea').hide();
                     $('#resetSpreadArea').hide();
                 }
         }
@@ -219,11 +234,13 @@ $(document).ready(function() {
     $("#resetSpreadArea").click(function() {
         $("#dialogTurnCardsResult").dialog('close');
         $("#dialogRedrawCards").dialog('close');
+        $("#dialogSaveSpreadArea").dialog('close');
         $("#dialogResetSpreadArea").text('將自動重新洗牌。你確定要刪除牌陣嗎？').dialog('open');
     }).hide();
 
     // Create cardPositions
     $('#addCard').click(function() {
+        $('#saveSpreadArea').show();
         $('#resetSpreadArea').show();
 
         $('#spreadArea').data('cardSN', $('#spreadArea').data('cardSN') + 1);
@@ -316,6 +333,7 @@ $(document).ready(function() {
         // Open result dialog
         $("#dialogTurnCardsResult").html("<p>可將以下結果複製貼上給解牌者：</p><p>" + cardStr + "</p>").dialog('open');
         $("#dialogResetSpreadArea").dialog('close');
+        $("#dialogSaveSpreadArea").dialog('close');
         $("#dialogRedrawCards").dialog('close');
     });
 
@@ -323,6 +341,16 @@ $(document).ready(function() {
     $("#redrawCards").click(function() {
         $("#dialogTurnCardsResult").dialog('close');
         $("#dialogResetSpreadArea").dialog('close');
+        $("#dialogSaveSpreadArea").dialog('close');
         $("#dialogRedrawCards").text('將自動重新洗牌。你確定要重新抽牌嗎？').dialog('open');
     }).hide();
+    
+    // Save spreads
+    $("#saveSpreadArea").hide();
+    $("#saveSpreadArea").click(function() {
+        $("#dialogTurnCardsResult").dialog('close');
+        $("#dialogResetSpreadArea").dialog('close');
+        $("#dialogSaveSpreadArea").text('#dialogSaveSpreadArea').dialog('open');
+        $("#dialogRedrawCards").dialog('close');
+    });
 });
