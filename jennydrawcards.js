@@ -88,8 +88,8 @@ $(document).ready(function() {
         .blur( function() { $(this).removeClass('ui-state-hover'); } );
         
 
-    $('#draggable').data('card', 0).data('reversed', 0).hide();
-    $('#droppable').hide();
+    $('#cardProto').data('card', 0).data('reversed', 0).hide();
+    $('#cardPosition').hide();
     
     $('#dialogResult').dialog({
         bgiframe: true,
@@ -100,7 +100,7 @@ $(document).ready(function() {
         }
     });
 
-    $('#dialogRedraw').dialog({
+    $('#dialogRedrawCards').dialog({
         bgiframe: true,
         autoOpen: false,
         resizable: false,
@@ -110,7 +110,7 @@ $(document).ready(function() {
             Ok: function() {
                     $(this).dialog('close');
                     $('#shuffle').trigger('click');
-                    $('#spread').children('div').each(function(){
+                    $('#spreadArea').children('div').each(function(){
                         $(this).has('p') // for turned over cards
                             .children('div:first').height(cardHeight * 0.45);
                         
@@ -130,13 +130,13 @@ $(document).ready(function() {
                             .data('name', '')
                             .children('p').remove();
                     });
-                    $('#turnDroppable').hide();
-                    $('#resetDroppable').hide();
+                    $('#turnCards').hide();
+                    $('#redrawCards').hide();
                 }
         }
     });
 
-    $('#dialogClear').dialog({
+    $('#dialogReset').dialog({
         bgiframe: true,
         autoOpen: false,
         resizable: false,
@@ -146,11 +146,11 @@ $(document).ready(function() {
             Ok: function() {
                     $(this).dialog('close');
                     $('#shuffle').trigger('click');
-                    $('#spread').children().remove();
-                    $('#spread').data('left', $('#spread').position().left);
-                    $('#spread').data('cardSN', 0);
-                    $('#spread').data('cardMeaningSet', false);
-                    $('#turnDroppable').hide();
+                    $('#spreadArea').children().remove();
+                    $('#spreadArea').data('left', $('#spreadArea').position().left);
+                    $('#spreadArea').data('cardSN', 0);
+                    $('#spreadArea').data('cardMeaningSet', false);
+                    $('#turnCards').hide();
                 }
         }
     });
@@ -159,7 +159,7 @@ $(document).ready(function() {
     $('#shuffle').click(function() {
         // Clear first
         $("#deck").children().remove();
-        $("#dialogClear").dialog('close');
+        $("#dialogReset").dialog('close');
 
         // Set the range of cards (major, minor, both)
         var u, l;
@@ -181,9 +181,9 @@ $(document).ready(function() {
             }
         }
 
-        // Generate draggables
+        // Generate cardProtos
         for (i = l; i <= u; i = i + 1) {
-            $t = $("#draggable").clone(true);
+            $t = $("#cardProto").clone(true);
             $t.attr("id", $t.attr("id") + serialNumber);
             serialNumber += 1;
             
@@ -207,27 +207,27 @@ $(document).ready(function() {
         }
     });
     
-    // Keep the left property of the last droppable
-    $("#spread").data("left", $("#spread").position().left);
+    // Keep the left property of the last cardPosition
+    $("#spreadArea").data("left", $("#spreadArea").position().left);
 
-    // Clear the spread
-    $("#spread").data('cardSN', 0);
-    $("#spread").data('cardMeaningSet', false);
-    $("#deleteDroppable").click(function() {
+    // Clear the spreadArea
+    $("#spreadArea").data('cardSN', 0);
+    $("#spreadArea").data('cardMeaningSet', false);
+    $("#resetSpreadArea").click(function() {
         $("#dialogResult").dialog('close');
-        $("#dialogRedraw").dialog('close');
-        $("#dialogClear").text('將自動重新洗牌。你確定要刪除牌陣嗎？').dialog('open');
+        $("#dialogRedrawCards").dialog('close');
+        $("#dialogReset").text('將自動重新洗牌。你確定要刪除牌陣嗎？').dialog('open');
     }).hide();
 
-    // Create droppables
-    $('#createDroppable').click(function() {
-        $('#deleteDroppable').show();
+    // Create cardPositions
+    $('#addCard').click(function() {
+        $('#resetSpreadArea').show();
 
-        $('#spread').data('cardSN', $('#spread').data('cardSN') + 1);
+        $('#spreadArea').data('cardSN', $('#spreadArea').data('cardSN') + 1);
 
-        $t = $('#droppable').clone(true);
+        $t = $('#cardPosition').clone(true);
         $t.attr("id", $t.attr("id") + serialNumber);
-        $t.html('<span>位置 ' + $("#spread").data('cardSN') + '</span>');
+        $t.html('<span>位置 ' + $("#spreadArea").data('cardSN') + '</span>');
         $t.prepend('<div style="height: ' + cardHeight * 0.45 + 'px;"></div>');
         $t.dblclick(function() {
             $span = $(this).children('span:first');
@@ -242,7 +242,7 @@ $(document).ready(function() {
                     $container = $(this).parent();
                     $container.text($(this).attr('value'));
                     $container.parent().data('cardMeaning', $(this).attr('value'));
-                    $("#spread").data('cardMeaningSet', true);
+                    $("#spreadArea").data('cardMeaningSet', true);
                 }
             }).focus();
         });
@@ -252,10 +252,10 @@ $(document).ready(function() {
             .droppable({
                 hoverClass: 'ui-state-active',
                 
-                // When drawn cards are placed into the droppable...
+                // When drawn cards are placed into the cardPosition...
                 drop: function(event, ui) {
-                    $("#turnDroppable").show();
-                    $("#resetDroppable").show();
+                    $("#turnCards").show();
+                    $("#redrawCards").show();
                     
                     $(this).addClass('ui-state-highlight')
                         .data('card', ui.draggable.data('card'))
@@ -272,23 +272,23 @@ $(document).ready(function() {
                 accept: '.draggable'
             }).css({
                 position: 'absolute',
-                left: $("#spread").data("left"),
-                top: $("#spread").position().top
+                left: $("#spreadArea").data("left"),
+                top: $("#spreadArea").position().top
             });
         $t.show();
         
-        $("#spread").append($t);
-        $("#spread").data("left", $t.position().left + cardWidth + gridSize);
+        $("#spreadArea").append($t);
+        $("#spreadArea").data("left", $t.position().left + cardWidth + gridSize);
     });
 
     // Turn over the cards
-    $("#turnDroppable").hide();
-    $("#turnDroppable").click(function() {
+    $("#turnCards").hide();
+    $("#turnCards").click(function() {
         var cardStr = '';
 
-        $("#spread").children(".droppable").each(function() {
+        $("#spreadArea").children(".droppable").each(function() {
             // Set string for results
-            if ($("#spread").data('cardMeaningSet')) {
+            if ($("#spreadArea").data('cardMeaningSet')) {
                 if (cardStr != '') { cardStr += '<br />';}
                 if (!$(this).data('cardMeaning')) {
                     $(this).data('cardMeaning', $(this).children('span:first').text());
@@ -315,9 +315,9 @@ $(document).ready(function() {
     });
 
     // Redraw cards
-    $("#resetDroppable").click(function() {
+    $("#redrawCards").click(function() {
         $("#dialogResult").dialog('close');
-        $("#dialogClear").dialog('close');
-        $("#dialogRedraw").text('將自動重新洗牌。你確定要重新抽牌嗎？').dialog('open');
+        $("#dialogReset").dialog('close');
+        $("#dialogRedrawCards").text('將自動重新洗牌。你確定要重新抽牌嗎？').dialog('open');
     }).hide();
 });

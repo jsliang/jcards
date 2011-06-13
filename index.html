@@ -47,22 +47,22 @@
             <h2>3. 設定牌陣</h2>
             <p>按下「加牌」鈕新增牌的位置，牌的位置可視需求拖曳。牌陣設定好後，從上方洗好的牌中隨意挑選，將選到的牌拖曳至牌陣裡。抽牌完畢後再按下「翻牌」。</p>
             <div>
-                <input type="button" id="createDroppable" value="加牌" class='ui-state-default' />
-                <input type="button" id="turnDroppable" value="翻牌" class='ui-state-default' />
-                <input type="button" id="resetDroppable" value="重新抽牌" class='ui-state-default' />
-                <input type="button" id="deleteDroppable" value="刪除牌陣" class='ui-state-default' />
-                <div id="spread"></div>
+                <input type="button" id="addCard" value="加牌" class='ui-state-default' />
+                <input type="button" id="turnCards" value="翻牌" class='ui-state-default' />
+                <input type="button" id="redrawCards" value="重新抽牌" class='ui-state-default' />
+                <input type="button" id="resetSpreadArea" value="刪除牌陣" class='ui-state-default' />
+                <div id="spreadArea"></div>
             </div>
             
             <div id="dialogResult" title="抽牌結果"></div>
-            <div id="dialogRedraw" title="確定重新抽牌？"></div>
-            <div id="dialogClear" title="確定刪除牌陣？"></div>
+            <div id="dialogRedrawCards" title="確定重新抽牌？"></div>
+            <div id="dialogReset" title="確定刪除牌陣？"></div>
         </div>
         <!-- prototype for draggable -->
-        <div id="draggable" class="draggable ui-widget-content"></div>
+        <div id="cardProto" class="draggable ui-widget-content"></div>
 
         <!-- prototype for droppable -->
-        <div id="droppable" class="droppable ui-widget-header" title="雙擊以設定這個位置的意義"></div>
+        <div id="cardPosition" class="droppable ui-widget-header" title="雙擊以設定這個位置的意義"></div>
 
     </body> 
      
