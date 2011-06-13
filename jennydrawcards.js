@@ -155,9 +155,13 @@ $(document).ready(function() {
                     // AJAX POST
                     $.post(
                         "save_spread.php",
-                        { card_positions: str_positions },
+                        {
+                            card_positions: str_positions,
+                            card_name: $('#spreadName').attr('value')
+                        },
                         function(data) {
-                            alert(data.returnValue);
+                            alert(data.card_name);
+                            alert(data.card_positions);
                         },
                         "json"
                     );
@@ -366,7 +370,7 @@ $(document).ready(function() {
     $("#saveSpreadArea").click(function() {
         $("#dialogTurnCardsResult").dialog('close');
         $("#dialogResetSpreadArea").dialog('close');
-        $("#dialogSaveSpreadArea").text('#dialogSaveSpreadArea').dialog('open');
+        $("#dialogSaveSpreadArea").dialog('open');
         $("#dialogRedrawCards").dialog('close');
     });
 });

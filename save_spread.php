@@ -1,11 +1,20 @@
 <?php
 
-if (isset($_POST['card_positions'])){
-    $value = $_POST['card_positions'];  
-}else{
-    $value = "";
+if (isset($_POST['card_name'])){
+    $card_name = $_POST['card_name'];
+} else {
+    $card_name = "";
 }
 
-echo json_encode(array("returnValue"=>"This is returned from PHP : ".$value)); 
+if (isset($_POST['card_positions'])){
+    $card_positions = $_POST['card_positions'];  
+} else {
+    $card_positions = "";
+}
+
+echo json_encode(array(
+    "card_name" => $card_name,
+    "card_positions" => $card_positions
+)); 
 
 ?>
