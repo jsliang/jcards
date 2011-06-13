@@ -145,7 +145,13 @@ $(document).ready(function() {
             Cancel: function() { $(this).dialog('close'); },
             'Save': function() {
                     $(this).dialog('close');
-                    alert('#dialogSaveSpreadArea');
+                    
+                    str_positions = '';
+                    $("#spreadArea").children(".droppable").each(function() {
+                        info = $(this).attr("id") + ":" + $(this).data('cardMeaning') + "(" + $(this).position().left + ',' + $(this).position().top + ')';
+                        str_positions += info + '\t';
+                    });
+                    alert(str_positions);
                 }
         }
     });
@@ -260,8 +266,9 @@ $(document).ready(function() {
                 .keypress(function(event) {
                 if (event.which == '13') { // enter key pressed
                     $container = $(this).parent();
-                    $container.text($(this).attr('value'));
-                    $container.parent().data('cardMeaning', $(this).attr('value'));
+                    card_meaning = $(this).attr('value').replace('(', '&#40;').replace(')', '&#41;').replace(',', '$#44').replace('.', '&#46;').replace(':', '&#58;');
+                    $container.html(card_meaning);
+                    $container.parent().data('cardMeaning', card_meaning);
                     $("#spreadArea").data('cardMeaningSet', true);
                 }
             }).focus();
