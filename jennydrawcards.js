@@ -151,7 +151,16 @@ $(document).ready(function() {
                         info = $(this).attr("id") + ":" + $(this).data('cardMeaning') + "(" + $(this).position().left + ',' + $(this).position().top + ')';
                         str_positions += info + '\t';
                     });
-                    alert(str_positions);
+
+                    // AJAX POST
+                    $.post(
+                        "save_spread.php",
+                        { card_positions: str_positions },
+                        function(data) {
+                            alert(data.returnValue);
+                        },
+                        "json"
+                    );
                 }
         }
     });
