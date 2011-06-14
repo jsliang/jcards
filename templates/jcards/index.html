@@ -1,19 +1,19 @@
 ﻿<html>
     <head> 
         <meta http-equiv="Content-type" content="text/html; charset=utf-8" /> 
-        <title>jCards 塔羅抽牌程式 v0.6.0</title> 
+        <title>{{ title }}</title> 
         <meta name="author" content="Jui-Shan Liang" /> 
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" type="text/javascript"></script> 
         <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js" type="text/javascript"></script> 
         <script src="jennydrawcards.js" type="text/javascript"></script>
-        <script src="googleanalytics.js" type="text/javascript"></script>
-        <link rel="stylesheet" href="jquery-ui-1.7.1.custom.css" type="text/css" />
-        <link rel="stylesheet" href="style.css" type="text/css" />
+        <script src="{{ STATIC_URL }}googleanalytics.js" type="text/javascript"></script>
+        <link rel="stylesheet" href="{{ STATIC_URL }}jquery-ui-1.7.1.custom.css" type="text/css" />
+        <link rel="stylesheet" href="{{ STATIC_URL }}style.css" type="text/css" />
     </head> 
 
     <body>
         <div>
-            <h1>jCards 塔羅抽牌程式 v0.6.0</h1>
+            <h1>{{ title }}</h1>
             <!-- FB Like Button START -->
             <div id="fb-root" style="float: left;"></div>
             <script src="http://connect.facebook.net/en_US/all.js#appId=232597680088448&amp;xfbml=1"></script>
@@ -58,7 +58,9 @@
             
             <div id="dialogTurnCardsResult" title="抽牌結果"></div>
             <div id="dialogRedrawCards" title="確定重新抽牌？"></div>
-            <div id="dialogSaveSpreadArea" title="儲存牌陣"></div>
+            <div id="dialogSaveSpreadArea" title="儲存牌陣">
+                牌陣名稱：<input type="text" id="spreadName" />
+            </div>
             <div id="dialogResetSpreadArea" title="確定刪除牌陣？"></div>
         </div>
         <!-- prototype for draggable -->

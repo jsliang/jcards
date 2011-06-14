@@ -1,4 +1,4 @@
-﻿var serialNumber = 0;
+﻿var cardProtoSN = 0;
 var gridSize = 10;
 var cardWidth = 100;
 var cardHeight = 171;
@@ -148,10 +148,24 @@ $(document).ready(function() {
                     
                     str_positions = '';
                     $("#spreadArea").children(".droppable").each(function() {
-                        info = $(this).attr("id") + ":" + $(this).data('cardMeaning') + "(" + $(this).position().left + ',' + $(this).position().top + ')';
-                        str_positions += info + '\t';
+                        info = $(this).data('cardMeaning') + "(" + $(this).position().left + ',' + $(this).position().top + ')';
+                        str_positions += info + ':';
                     });
                     alert(str_positions);
+
+                    // AJAX GET
+                    $.get(
+                        "/save_spread",
+                        {
+                            spread_name: $('#spreadName').attr('value'),
+                            card_positions: str_positions
+                        },
+                        function(data) {
+                            alert(data.spread_name);
+                            alert(data.card_positions);
+                        },
+                        "json"
+                    );
                 }
         }
     });
@@ -168,7 +182,7 @@ $(document).ready(function() {
                     $('#shuffle').trigger('click');
                     $('#spreadArea').children().remove();
                     $('#spreadArea').data('left', $('#spreadArea').position().left);
-                    $('#spreadArea').data('cardSN', 0);
+                    $('#spreadArea').data('cardPosSN', 0);
                     $('#spreadArea').data('cardMeaningSet', false);
                     
                     $('#redrawCards').hide();
@@ -208,8 +222,8 @@ $(document).ready(function() {
         // Generate cardProtos
         for (i = l; i <= u; i = i + 1) {
             $t = $("#cardProto").clone(true);
-            $t.attr("id", $t.attr("id") + serialNumber);
-            serialNumber += 1;
+            $t.attr("id", $t.attr("id") + cardProtoSN);
+            cardProtoSN += 1;
             
             $t.data("card", cards[i - l])
                 .draggable({ grid: [gridSize, gridSize] })
@@ -235,7 +249,7 @@ $(document).ready(function() {
     $("#spreadArea").data("left", $("#spreadArea").position().left);
 
     // Clear the spreadArea
-    $("#spreadArea").data('cardSN', 0);
+    $("#spreadArea").data('cardPosSN', 0);
     $("#spreadArea").data('cardMeaningSet', false);
     $("#resetSpreadArea").click(function() {
         $("#dialogTurnCardsResult").dialog('close');
@@ -249,11 +263,11 @@ $(document).ready(function() {
         $('#saveSpreadArea').show();
         $('#resetSpreadArea').show();
 
-        $('#spreadArea').data('cardSN', $('#spreadArea').data('cardSN') + 1);
+        $('#spreadArea').data('cardPosSN', $('#spreadArea').data('cardPosSN') + 1);
 
         $t = $('#cardPosition').clone(true);
-        $t.attr("id", $t.attr("id") + serialNumber);
-        $t.html('<span>位置 ' + $("#spreadArea").data('cardSN') + '</span>');
+        $t.attr("id", $t.attr("id") + $("#spreadArea").data('cardPosSN'));
+        $t.html('<span>位置 ' + $("#spreadArea").data('cardPosSN') + '</span>');
         $t.prepend('<div style="height: ' + cardHeight * 0.45 + 'px;"></div>');
         $t.dblclick(function() {
             $span = $(this).children('span:first');
@@ -266,14 +280,13 @@ $(document).ready(function() {
                 .keypress(function(event) {
                 if (event.which == '13') { // enter key pressed
                     $container = $(this).parent();
-                    card_meaning = $(this).attr('value').replace('(', '&#40;').replace(')', '&#41;').replace(',', '$#44').replace('.', '&#46;').replace(':', '&#58;');
+                    card_meaning = $(this).attr('value').replace('(', '&#40;').replace(')', '&#41;').replace(',', '$#44').replace('.', '&#46;').replace(':','&#58;');
                     $container.html(card_meaning);
                     $container.parent().data('cardMeaning', card_meaning);
                     $("#spreadArea").data('cardMeaningSet', true);
                 }
             }).focus();
         });
-        serialNumber += 1;
 
         $t.draggable({ grid: [gridSize, gridSize] })
             .droppable({
@@ -328,9 +341,9 @@ $(document).ready(function() {
             $(this).html('<div style="height: ' + (cardHeight + gridSize * 0.5) + 'px;"></div><p>' + $(this).data('name') + '</p>');
 
             // Set card image
-            var url = 'url(cardimg/%cardid%.jpg)';
+            var url = 'url({{ STATIC_URL }}cardimg/%cardid%.jpg)';
             if ($(this).data("reversed") == 1) {
-                url = 'url(cardimg/%cardid%r.jpg)';
+                url = 'url({{ STATIC_URL }}cardimg/%cardid%r.jpg)';
             }
             if ($(this).data("card") < 10) { url = url.replace('%cardid%', '0' + $(this).data("card")); }
             else { url = url.replace('%cardid%', $(this).data("card")); }
@@ -357,7 +370,7 @@ $(document).ready(function() {
     $("#saveSpreadArea").click(function() {
         $("#dialogTurnCardsResult").dialog('close');
         $("#dialogResetSpreadArea").dialog('close');
-        $("#dialogSaveSpreadArea").text('#dialogSaveSpreadArea').dialog('open');
+        $("#dialogSaveSpreadArea").dialog('open');
         $("#dialogRedrawCards").dialog('close');
     });
 });
