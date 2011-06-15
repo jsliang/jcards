@@ -152,11 +152,20 @@ $(document).ready(function() {
                         str_positions += info + ':';
                     });
                     alert(str_positions);
-
+                    
+                    // Get creator FB ID
+                    fb_id = 0;
+                    FB.api('/me', function(user) {
+                        if (user != null) {
+                            fb_id = user.id
+                        }
+                    });
+                    
                     // AJAX GET
                     $.get(
                         "/save_spread",
                         {
+                            creator_fb_id: fb_id,
                             spread_name: $('#spreadName').attr('value'),
                             card_positions: str_positions
                         },

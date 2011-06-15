@@ -30,11 +30,11 @@ def save_spread(request):
     response = HttpResponse()
     response.encoding = "utf-8"
 
-    fb_id = 1116802743 # temporarily set to juishanliang's fb id
+    creator_fb_id = int(request.GET['creator_fb_id'])  # if not specified in client, creator_fb_id would be 0
     try:
-        user = User.objects.get(fb_id = fb_id)
+        user = User.objects.get(fb_id = creator_fb_id)
     except:
-        user = User(fb_id = fb_id)
+        user = User(fb_id = creator_fb_id)
         user.save()
 
     response.write("<p>%s</p>" % request.GET['spread_name'])
@@ -42,7 +42,7 @@ def save_spread(request):
 
     try:
         spread = Spread(
-            creator = user, # temporarily set to 1
+            creator = user,
             name = request.GET['spread_name']
         )
         spread.save()
