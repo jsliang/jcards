@@ -3,19 +3,23 @@
         <meta http-equiv="Content-type" content="text/html; charset=utf-8" /> 
         <title>{{ title }}</title> 
         <meta name="author" content="Jui-Shan Liang" /> 
+        <link rel="stylesheet" href="{{ STATIC_URL }}jquery-ui-1.7.1.custom.css" type="text/css" />
+        <link rel="stylesheet" href="{{ STATIC_URL }}style.css" type="text/css" />
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" type="text/javascript"></script> 
         <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js" type="text/javascript"></script> 
         <script src="jennydrawcards.js" type="text/javascript"></script>
         <script src="{{ STATIC_URL }}googleanalytics.js" type="text/javascript"></script>
-        <link rel="stylesheet" href="{{ STATIC_URL }}jquery-ui-1.7.1.custom.css" type="text/css" />
-        <link rel="stylesheet" href="{{ STATIC_URL }}style.css" type="text/css" />
     </head> 
 
     <body>
+        <!-- Required for FB JavaScript SDK -->
+        <div id="fb-root"></div>
         <div>
+            <div align="center">
+                <img id="image"/>
+                <div id="name"></div>
+            </div>
             <!-- FB Login Button START -->
-            <div id="fb-root"></div>
-            <script src="http://connect.facebook.net/en_US/all.js#appId={{ FACEBOOK_APP_ID }}&amp;xfbml=1"></script>
             <div style="float: right; clear: right; width: 200px; text-align: right;">
                 <fb:login-button show-faces="true" width="200" max-rows="1" scope="{{ FACEBOOK_APP_SCOPE }}"></fb:login-button>
             </div>
@@ -74,6 +78,30 @@
         <!-- prototype for droppable -->
         <div id="cardPosition" class="droppable ui-widget-header" title="雙擊以設定這個位置的意義"></div>
 
+        <!-- Async loading FB JavaScript SDK -->
+        <script>
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId:'{{ FACEBOOK_APP_ID }}',
+                cookie:true, 
+                status:true,
+                xfbml:true 
+            });
+            FB.api('/me', function(user) {
+                if(user != null) {
+                    var image = document.getElementById('image');
+                    image.src = 'https://graph.facebook.com/' + user.id + '/picture';
+                    var name = document.getElementById('name');
+                    name.innerHTML = user.name
+                }
+            });
+        };
+        (function() {
+            var e = document.createElement('script'); e.async = true;
+            e.src = document.location.protocol + '//connect.facebook.net/zh_TW/all.js';
+            document.getElementById('fb-root').appendChild(e);
+        }());
+        </script>
     </body> 
      
 </html>
