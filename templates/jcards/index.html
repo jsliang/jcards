@@ -15,10 +15,6 @@
         <!-- Required for FB JavaScript SDK -->
         <div id="fb-root"></div>
         <div>
-            <div align="center">
-                <img id="image"/>
-                <div id="name"></div>
-            </div>
             <!-- FB Login Button START -->
             <div style="float: right; clear: right; width: 200px; text-align: right;">
                 <fb:login-button show-faces="true" width="200" max-rows="1" scope="{{ FACEBOOK_APP_SCOPE }}"></fb:login-button>
@@ -86,14 +82,6 @@
                 cookie:true, 
                 status:true,
                 xfbml:true 
-            });
-            FB.api('/me', function(user) {
-                if(user != null) {
-                    var image = document.getElementById('image');
-                    image.src = 'https://graph.facebook.com/' + user.id + '/picture';
-                    var name = document.getElementById('name');
-                    name.innerHTML = user.name
-                }
             });
         };
         (function() {
