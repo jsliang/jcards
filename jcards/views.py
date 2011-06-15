@@ -1,22 +1,29 @@
 # -*- coding: utf-8 -*-
 import re
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from jcards.models import CardPosition, Spread, User
 
 title = "jCards 塔羅抽牌程式 v0.6.0"
 STATIC_URL = 'http://jcards.twbbs.org/templates/'
 
+FACEBOOK_APP_ID = '233445773338059'
+FACEBOOK_APP_SCOPE = 'user_about_me'
+
 def index(request):
-    return render_to_response('jcards/index.html',
-                               {'title': title,
-                                'STATIC_URL': STATIC_URL
-                                })
+    return render_to_response('jcards/index.html', {
+            'title': title,
+            'STATIC_URL': STATIC_URL,
+            'FACEBOOK_APP_ID': FACEBOOK_APP_ID,
+            'FACEBOOK_APP_SCOPE': FACEBOOK_APP_SCOPE
+        })
 def jennydrawcards(request):
-    return render_to_response('jcards/jennydrawcards.js',
-                               {
-                                'STATIC_URL': STATIC_URL
-                                })
+    return render_to_response('jcards/jennydrawcards.js', {
+            'title': title,
+            'STATIC_URL': STATIC_URL,
+            'FACEBOOK_APP_ID': FACEBOOK_APP_ID,
+            'FACEBOOK_APP_SCOPE': FACEBOOK_APP_SCOPE
+        })
 def save_spread(request):
     request.encoding = "utf-8"
 
