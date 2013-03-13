@@ -1,4 +1,12 @@
-.draggable { width: 100px; height: 171px; margin: 5px; cursor: pointer; }
+.draggable {
+    width: 75px;
+    height: 128px;
+    margin: 5px;
+    cursor: pointer;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+  }
 .droppable {
     width: 100px; height: 171px; margin: 5px;
     background-position: top center;
@@ -9,7 +17,7 @@
 .ui-widget-header p, .ui-widget-content p { margin: 0; }
 
 #snaptarget { height: 140px; }
-#deck { float: none; clear: both; height: 200px;}
+#deck { float: none; clear: both; height: 150px;}
 #spread { float: none; clear: both; }
 
 h1 { margin-left: -2em; font-size: 1.2em; }
