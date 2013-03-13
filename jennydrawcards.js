@@ -79,10 +79,10 @@
       var cards, i, i_temp, l, swp, t, tmp_card, u, _i, _j, _results;
       $("#deck").children().remove();
       $("#dialogResetSpreadArea").dialog('close');
-      if ($('#mode').attr("value") === "1") {
+      if ($('#mode').attr("value") === "major") {
         l = 0;
         u = 21;
-      } else if ($('#mode').attr("value") === "2") {
+      } else if ($('#mode').attr("value") === "minor") {
         l = 22;
         u = 77;
       } else {

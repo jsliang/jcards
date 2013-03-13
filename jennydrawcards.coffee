@@ -172,13 +172,13 @@ $(document).ready ()->
         $("#dialogResetSpreadArea").dialog('close')
 
         # Set the range of cards (major, minor, both)
-        if $('#mode').attr("value") is "1"
+        if $('#mode').attr("value") is "major"
             l = 0
             u = 21
-        else if $('#mode').attr("value") is "2"
+        else if $('#mode').attr("value") is "minor"
             l = 22
             u = 77
-        else
+        else # both
             l = 0
             u = 77
 
