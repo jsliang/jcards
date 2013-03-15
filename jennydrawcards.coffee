@@ -165,6 +165,32 @@ $(document).ready ()->
                     .data('cardMeaningSet', false)
                 $('#turnCards').hide()
 
+    # Create cardPositions
+    put_card_in_spread = (position, card)->
+        dropped = false
+        $("#spreadArea .droppable").each ()->
+            if $(this).data('card')?
+                if $(this).data('card') is card.data('card')
+                    dropped = true
+
+        if dropped
+            return
+
+        $("#turnCards").show()
+        $("#redrawCards").show()
+
+        position.addClass('ui-state-highlight')
+            .data('card', card.data('card'))
+            .data('reversed', card.data('reversed'))
+            .data('name', cardName[position.data("card")])
+
+        if card.data('reversed') is 0
+            position.data('name', position.data('name') + '（正）')
+        else
+            position.data('name', position.data('name') + '（逆）')
+
+        card.fadeOut('fast')
+
     # Shuffle
     $('#shuffle').click ()->
         # Clear first
@@ -201,11 +227,28 @@ $(document).ready ()->
             serialNumber += 1
 
             tmp_card.data("card", cards[i - l])
-                .draggable({ grid: [gridSize, gridSize] })
+                .draggable
+                    grid: [gridSize, gridSize]
+                    start: ()->
+                        $(this).data("dragged", true)
+                    stop: ()->
+                        $(this).data("dragged", false)
                 .mouseover ()->
                     $(this).addClass('ui-state-highlight')
                 .mouseout ()->
                     $(this).removeClass('ui-state-highlight')
+                .mouseup ()->
+                    # if users can drag cards, this means they're not using mobile devices
+                    if $(this).data("dragged")
+                        return
+
+                    # find next unplaced position
+                    empty_position = []
+                    $("#spreadArea .droppable").each ()->
+                        if not $(this).data("card")?
+                            empty_position.push($(this))
+
+                    put_card_in_spread(empty_position[0], $(this))
                 .css
                     position: 'absolute',
                     left: $("#deck").position().left + (i - l) * gridSize,
@@ -234,7 +277,6 @@ $(document).ready ()->
             $("#dialogResetSpreadArea").text('將自動重新洗牌。你確定要刪除牌陣嗎？').dialog('open')
         .hide()
 
-    # Create cardPositions
     $('#addCard').click ()->
         $('#resetSpreadArea').show()
 
@@ -265,25 +307,12 @@ $(document).ready ()->
             .draggable
                 grid: [gridSize, gridSize]
             .droppable
-                hoverClass: 'ui-state-active',
+                hoverClass: 'ui-state-active'
                 accept: '.draggable',
 
                 # When drawn cards are placed into the cardPosition...
                 drop: (event, ui)->
-                    $("#turnCards").show()
-                    $("#redrawCards").show()
-
-                    $(this).addClass('ui-state-highlight')
-                        .data('card', ui.draggable.data('card'))
-                        .data('reversed', ui.draggable.data('reversed'))
-                        .data('name', cardName[$(this).data("card")])
-
-                    if ui.draggable.data('reversed') is 0
-                        $(this).data('name', $(this).data('name') + '（正）')
-                    else
-                        $(this).data('name', $(this).data('name') + '（逆）')
-
-                    ui.draggable.fadeOut('fast')
+                    put_card_in_spread($(this), ui.draggable)
             .css
                 position: 'absolute',
                 left: $("#spreadArea").data("left"),

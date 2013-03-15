@@ -14,6 +14,7 @@
   $ = jQuery;
 
   $(document).ready(function() {
+    var put_card_in_spread;
     $('input, select').focus(function() {
       return $(this).addClass('ui-state-hover');
     }).blur(function() {
@@ -74,6 +75,29 @@
         }
       }
     });
+    put_card_in_spread = function(position, card) {
+      var dropped;
+      dropped = false;
+      $("#spreadArea .droppable").each(function() {
+        if ($(this).data('card') != null) {
+          if ($(this).data('card') === card.data('card')) {
+            return dropped = true;
+          }
+        }
+      });
+      if (dropped) {
+        return;
+      }
+      $("#turnCards").show();
+      $("#redrawCards").show();
+      position.addClass('ui-state-highlight').data('card', card.data('card')).data('reversed', card.data('reversed')).data('name', cardName[position.data("card")]);
+      if (card.data('reversed') === 0) {
+        position.data('name', position.data('name') + '（正）');
+      } else {
+        position.data('name', position.data('name') + '（逆）');
+      }
+      return card.fadeOut('fast');
+    };
     $('#shuffle').click(function() {
       var cards, i, i_temp, l, swp, t, tmp_card, u, _i, _j, _results;
       $("#deck").children().remove();
@@ -105,11 +129,29 @@
         tmp_card.attr("id", tmp_card.attr("id") + serialNumber);
         serialNumber += 1;
         tmp_card.data("card", cards[i - l]).draggable({
-          grid: [gridSize, gridSize]
+          grid: [gridSize, gridSize],
+          start: function() {
+            return $(this).data("dragged", true);
+          },
+          stop: function() {
+            return $(this).data("dragged", false);
+          }
         }).mouseover(function() {
           return $(this).addClass('ui-state-highlight');
         }).mouseout(function() {
           return $(this).removeClass('ui-state-highlight');
+        }).mouseup(function() {
+          var empty_position;
+          if ($(this).data("dragged")) {
+            return;
+          }
+          empty_position = [];
+          $("#spreadArea .droppable").each(function() {
+            if ($(this).data("card") == null) {
+              return empty_position.push($(this));
+            }
+          });
+          return put_card_in_spread(empty_position[0], $(this));
         }).css({
           position: 'absolute',
           left: $("#deck").position().left + (i - l) * gridSize,
@@ -166,15 +208,7 @@
         hoverClass: 'ui-state-active',
         accept: '.draggable',
         drop: function(event, ui) {
-          $("#turnCards").show();
-          $("#redrawCards").show();
-          $(this).addClass('ui-state-highlight').data('card', ui.draggable.data('card')).data('reversed', ui.draggable.data('reversed')).data('name', cardName[$(this).data("card")]);
-          if (ui.draggable.data('reversed') === 0) {
-            $(this).data('name', $(this).data('name') + '（正）');
-          } else {
-            $(this).data('name', $(this).data('name') + '（逆）');
-          }
-          return ui.draggable.fadeOut('fast');
+          return put_card_in_spread($(this), ui.draggable);
         }
       }).css({
         position: 'absolute',
