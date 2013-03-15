@@ -340,3 +340,8 @@ $(document).ready ()->
                 .text('將自動重新洗牌。你確定要重新抽牌嗎？')
                 .dialog('open')
         .hide()
+
+    # Create a default five-card spread
+    $(window).load ()->
+        for i in [1..5]
+            $('#addCard').trigger('click')
