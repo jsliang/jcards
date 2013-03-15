@@ -245,7 +245,7 @@ $(document).ready ()->
                     # find next unplaced position
                     empty_position = []
                     $("#spreadArea .droppable").each ()->
-                        if not $(this).data("card")?
+                        if not $(this).data("card")? or $(this).data("card") is ''
                             empty_position.push($(this))
 
                     put_card_in_spread(empty_position[0], $(this))
